@@ -39,17 +39,14 @@ public class TodaysExpenseFragment extends Fragment implements TodaysExpenseView
   // TODO: 14/12/2018  add funds text
   public void displayTotalExpense(Long totalExpense) {
 
-    double myTotalExpenses = totalExpense.doubleValue();
-    double myBalance = 10.00 - myTotalExpenses;
-
-
+    double myFunds = MainActivity.funds.getFundAmount();
 
     TextView totalExpenseTextBox = (TextView) getActivity().findViewById(R.id.total_expense);
     TextView fundsTextBox = (TextView) getActivity().findViewById(R.id.todays_funds);
     TextView fundsBalanceTextBox = (TextView) getActivity().findViewById(R.id.fund_balance);
-    fundsTextBox.setText("Todays Funds " + getActivity().getString(R.string.euro_sym));
+    fundsTextBox.setText("Todays Funds " + getActivity().getString(R.string.euro_sym) + Double.toString(myFunds) );
     totalExpenseTextBox.setText(getActivity().getString(R.string.total_expense) + " " + getActivity().getString(R.string.euro_sym) + totalExpense.toString());
-    fundsBalanceTextBox.setText("Balance " + getActivity().getString(R.string.euro_sym) + Double.toString(myBalance) );
+    fundsBalanceTextBox.setText("Balance " + getActivity().getString(R.string.euro_sym) + Double.toString(myFunds - totalExpense.doubleValue()));
   }
 
   @Override

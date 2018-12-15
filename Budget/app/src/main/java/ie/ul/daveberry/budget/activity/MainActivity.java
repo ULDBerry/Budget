@@ -38,6 +38,31 @@ public class MainActivity extends FragmentActivity implements NavigationDrawerIt
   private static Boolean isNotificationScheduled = false;
   private HomeViewPagerAdapter homeViewPagerAdapter;
 
+  public static Fund funds = new Fund();
+
+  public static class Fund {
+
+    private double fundAmount;
+
+    public Fund(){
+      fundAmount = 0;
+    }
+
+    public Fund(double fundAmountIn){
+      this.fundAmount = fundAmountIn;
+    }
+
+    public double getFundAmount(){
+      return this.fundAmount;
+    }
+
+    public void setFundAmount(double fundAmountIn){
+      this.fundAmount = fundAmountIn;
+    }
+
+  }
+
+
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);

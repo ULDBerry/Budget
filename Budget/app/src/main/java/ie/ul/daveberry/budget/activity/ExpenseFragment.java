@@ -69,7 +69,7 @@ public class ExpenseFragment extends Fragment implements ExpenseView, View.OnCli
     ExpensePresenter expensePresenter = new ExpensePresenter(expenseDatabaseHelper, this);
     if(expensePresenter.addExpense()){
       MainActivity activity = (MainActivity) getActivity();
-      Toast.makeText(activity, R.string.expense_add_successfully, Toast.LENGTH_LONG).show();
+      Toast.makeText(activity,  R.string.expense_add_successfully, Toast.LENGTH_LONG).show();
       activity.onExpenseAdded();
     }
     expenseDatabaseHelper.close();
