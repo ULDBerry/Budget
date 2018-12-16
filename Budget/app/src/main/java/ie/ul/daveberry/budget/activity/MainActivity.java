@@ -41,6 +41,22 @@ public class MainActivity extends FragmentActivity implements NavigationDrawerIt
 
   public static Fund funds = new Fund();
 
+
+
+  // Get the current database fund and update the expsense window
+
+   public void getDatabaseFunds(){
+
+     ExpenseDatabaseHelper mExpenseDatabaseHelper;
+     mExpenseDatabaseHelper = new ExpenseDatabaseHelper(this);
+
+     //myFunds = Double.toString(  mExpenseDatabaseHelper.getFunds());
+     funds.setFundAmount(mExpenseDatabaseHelper.getFunds());
+     mExpenseDatabaseHelper.close();
+
+  }
+
+
   public static class Fund {
 
     private double fundAmount;
@@ -71,6 +87,7 @@ public class MainActivity extends FragmentActivity implements NavigationDrawerIt
 
     configureDrawer();
     configureActionBar();
+    getDatabaseFunds();
 
     if (!isNotificationScheduled) scheduleReminder();
   }
@@ -141,7 +158,8 @@ public class MainActivity extends FragmentActivity implements NavigationDrawerIt
       ExpenseDatabaseHelper mExpenseDatabaseHelper;
       mExpenseDatabaseHelper = new ExpenseDatabaseHelper(this);
 
-      myFunds = Double.toString(  mExpenseDatabaseHelper.getFunds());
+      //myFunds = Double.toString(  mExpenseDatabaseHelper.getFunds());
+      myFunds = String.format("%.2f",mExpenseDatabaseHelper.getFunds());
       mExpenseDatabaseHelper.close();
 
 

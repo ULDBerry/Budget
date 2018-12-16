@@ -46,8 +46,8 @@ public class TodaysExpenseFragment extends Fragment implements TodaysExpenseView
     TextView totalExpenseTextBox = (TextView) getActivity().findViewById(R.id.total_expense);
     TextView fundsTextBox = (TextView) getActivity().findViewById(R.id.todays_funds);
     TextView fundsBalanceTextBox = (TextView) getActivity().findViewById(R.id.fund_balance);
-    fundsTextBox.setText("Todays Funds " + getActivity().getString(R.string.euro_sym) + Double.toString(myFunds));
-    totalExpenseTextBox.setText(getActivity().getString(R.string.total_expense) + " " + getActivity().getString(R.string.euro_sym) + Double.toString(mytotalExpenses));
+    fundsTextBox.setText("Todays Funds " + getActivity().getString(R.string.euro_sym) + String.format("%.2f",myFunds));
+    totalExpenseTextBox.setText(getActivity().getString(R.string.total_expense) + " " + getActivity().getString(R.string.euro_sym) + String.format("%.2f",mytotalExpenses));
 
     if (myFunds - mytotalExpenses <= 0) {
       fundsBalanceTextBox.setTextColor(Color.RED);
@@ -55,7 +55,7 @@ public class TodaysExpenseFragment extends Fragment implements TodaysExpenseView
       fundsBalanceTextBox.setTextColor(Color.BLACK);
     }
 
-    fundsBalanceTextBox.setText("Balance " + getActivity().getString(R.string.euro_sym) + Double.toString(myFunds - mytotalExpenses));
+    fundsBalanceTextBox.setText("Balance " + getActivity().getString(R.string.euro_sym) + String.format("%.2f",(myFunds - mytotalExpenses)));
   }
     @Override
   public void displayTodaysExpenses(List<Expense> expenses) {
