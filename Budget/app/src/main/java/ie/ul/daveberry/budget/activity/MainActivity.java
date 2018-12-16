@@ -22,6 +22,7 @@ import android.widget.ListView;
 import ie.ul.daveberry.budget.R;
 import ie.ul.daveberry.budget.adapter.DrawerListViewAdapter;
 import ie.ul.daveberry.budget.adapter.HomeViewPagerAdapter;
+import ie.ul.daveberry.budget.database.ExpenseDatabaseHelper;
 import ie.ul.daveberry.budget.notification.FillExpenseNotificationScheduler;
 import ie.ul.daveberry.budget.presenter.NavigationDrawerPresenter;
 import ie.ul.daveberry.budget.view.NavigationDrawerItemView;
@@ -133,8 +134,24 @@ public class MainActivity extends FragmentActivity implements NavigationDrawerIt
     }
 
     if (id == R.id.action_add_funds) {
+      //String funds =  Double.toString(MainActivity.funds.getFundAmount());
+      String myFunds = "0";
+
+      //Get funds from database
+      ExpenseDatabaseHelper mExpenseDatabaseHelper;
+      mExpenseDatabaseHelper = new ExpenseDatabaseHelper(this);
+
+      myFunds = Double.toString(  mExpenseDatabaseHelper.getFunds());
+      mExpenseDatabaseHelper.close();
+
+
+
       Intent intent = new Intent(this, AddFundsActivity.class);
-      startActivityForResult(intent, ADD_NEW_FUND);
+      //TextView fundInput = findViewById(R.id.fundInput);
+      //fundInput.setText("9999");
+      intent.putExtra("funds",myFunds);
+     // startActivityForResult(intent, ADD_NEW_FUND);
+        startActivity(intent);
       return true;
     }
 
@@ -154,6 +171,7 @@ public class MainActivity extends FragmentActivity implements NavigationDrawerIt
     }
   }
 
+  //todo figure out how or if this updates current expenses
   public void onExpenseAdded() {
     viewPager.setAdapter(homeViewPagerAdapter);
     actionBar.setSelectedNavigationItem(1);

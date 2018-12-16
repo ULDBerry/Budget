@@ -34,15 +34,15 @@
 
             <TextView
                 android:id="@+id/todays_funds"
-                android:textSize="25dp"
+                android:textSize="20dp"
                 android:textColor="@android:color/black"
                 android:layout_width="wrap_content"
                 android:layout_height="50dp"/>
 
             <TextView
             android:id="@+id/total_expense"
-            android:textSize="25dp"
-            android:textColor="@android:color/holo_red_light"
+            android:textSize="20dp"
+            android:textColor="@color/application_background"
             android:layout_width="wrap_content"
             android:layout_height="50dp"/>
 

@@ -9,30 +9,37 @@ import android.database.sqlite.SQLiteOpenHelper;
 import java.util.ArrayList;
 import java.util.List;
 
+import ie.ul.daveberry.budget.activity.MainActivity;
+import ie.ul.daveberry.budget.model.DBFunds;
 import ie.ul.daveberry.budget.model.Expense;
 import ie.ul.daveberry.budget.model.ExpenseType;
 import ie.ul.daveberry.budget.table.ExpenseTable;
 import ie.ul.daveberry.budget.table.ExpenseTypeTable;
+import ie.ul.daveberry.budget.table.FundTable;
 import ie.ul.daveberry.budget.utils.DateUtil;
 
 import static ie.ul.daveberry.budget.utils.DateUtil.getCurrentDate;
 import static ie.ul.daveberry.budget.utils.DateUtil.getCurrentWeeksDates;
+import static java.lang.Double.parseDouble;
 import static java.lang.Integer.parseInt;
 import static java.lang.Long.parseLong;
 
 public class ExpenseDatabaseHelper extends SQLiteOpenHelper {
   public static final String EXPENSE_DB = "expense";
 
-//Create Dateabase
+//Create Database
   public ExpenseDatabaseHelper(Context context) {
     super(context, EXPENSE_DB, null, 1);
   }
 
+  //todo add create funds table
   @Override
   public void onCreate(SQLiteDatabase sqLiteDatabase) {
     sqLiteDatabase.execSQL(ExpenseTable.CREATE_TABLE_QUERY);
     sqLiteDatabase.execSQL(ExpenseTypeTable.CREATE_TABLE_QUERY);
+    sqLiteDatabase.execSQL(FundTable.CREATE_TABLE_QUERY);
     seedExpenseTypes(sqLiteDatabase);
+    seedFund(sqLiteDatabase);
   }
 
   @Override
@@ -72,6 +79,35 @@ public class ExpenseDatabaseHelper extends SQLiteOpenHelper {
 
     database.insert(ExpenseTable.TABLE_NAME, null, values);
   }
+
+//todo took out Expsense expense which is the model, i dont have a fund model
+    public void updateFund() {
+        SQLiteDatabase database = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(FundTable.AMOUNT, MainActivity.funds.getFundAmount());
+        database.update(FundTable.TABLE_NAME, values,"_id = 1",null);
+    }
+
+  //public List<DBFunds> getFund() {
+  //  SQLiteDatabase database = this.getWritableDatabase();
+  //  Cursor cursor = database.rawQuery(FundTable.SELECT_FUND, null);
+  //  return buildFunds(cursor);
+  //}
+
+    public double getFunds(){
+
+      SQLiteDatabase database = this.getReadableDatabase();
+
+      Cursor cursor = database.rawQuery(FundTable.SELECT_FUND,null);
+
+      // 3. if we got results get the first one
+      if (cursor != null)
+        cursor.moveToFirst();
+
+      return cursor.getDouble(0);
+
+    }
+
 
   public List<Expense> getExpenses() {
     SQLiteDatabase database = this.getWritableDatabase();
@@ -135,6 +171,22 @@ public class ExpenseDatabaseHelper extends SQLiteOpenHelper {
     return expenses;
   }
 
+  private List<DBFunds> buildFunds(Cursor cursor) {
+    List<DBFunds> dbfunds = new ArrayList<>();
+    if(isCursorPopulated(cursor)){
+      do {
+        String amount = cursor.getString(cursor.getColumnIndex(FundTable.AMOUNT));
+        String id = cursor.getString(cursor.getColumnIndex(FundTable._ID));
+
+        DBFunds dbfund = id == null ? new DBFunds(parseDouble(amount)) : new DBFunds(parseInt(id), parseDouble(amount));
+        dbfunds.add(dbfund);
+      } while(cursor.moveToNext());
+    }
+
+    return dbfunds;
+  }
+
+
   private boolean isCursorPopulated(Cursor cursor) {
     return cursor != null && cursor.moveToFirst();
   }
@@ -147,5 +199,16 @@ public class ExpenseDatabaseHelper extends SQLiteOpenHelper {
 
       sqLiteDatabase.insert(ExpenseTypeTable.TABLE_NAME, null, contentValues);
     }
+
   }
+
+  private void seedFund(SQLiteDatabase sqLiteDatabase) {
+    //SQLiteDatabase database = this.getWritableDatabase();
+    ContentValues values = new ContentValues();
+    values.put(FundTable.AMOUNT, 0);
+    sqLiteDatabase.insert(FundTable.TABLE_NAME, null, values);
+    }
+
+
+
 }

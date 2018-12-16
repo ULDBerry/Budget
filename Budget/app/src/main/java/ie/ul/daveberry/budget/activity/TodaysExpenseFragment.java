@@ -1,5 +1,6 @@
 package ie.ul.daveberry.budget.activity;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -40,16 +41,23 @@ public class TodaysExpenseFragment extends Fragment implements TodaysExpenseView
   public void displayTotalExpense(Long totalExpense) {
 
     double myFunds = MainActivity.funds.getFundAmount();
+    double mytotalExpenses = totalExpense.doubleValue();
 
     TextView totalExpenseTextBox = (TextView) getActivity().findViewById(R.id.total_expense);
     TextView fundsTextBox = (TextView) getActivity().findViewById(R.id.todays_funds);
     TextView fundsBalanceTextBox = (TextView) getActivity().findViewById(R.id.fund_balance);
-    fundsTextBox.setText("Todays Funds " + getActivity().getString(R.string.euro_sym) + Double.toString(myFunds) );
-    totalExpenseTextBox.setText(getActivity().getString(R.string.total_expense) + " " + getActivity().getString(R.string.euro_sym) + totalExpense.toString());
-    fundsBalanceTextBox.setText("Balance " + getActivity().getString(R.string.euro_sym) + Double.toString(myFunds - totalExpense.doubleValue()));
-  }
+    fundsTextBox.setText("Todays Funds " + getActivity().getString(R.string.euro_sym) + Double.toString(myFunds));
+    totalExpenseTextBox.setText(getActivity().getString(R.string.total_expense) + " " + getActivity().getString(R.string.euro_sym) + Double.toString(mytotalExpenses));
 
-  @Override
+    if (myFunds - mytotalExpenses <= 0) {
+      fundsBalanceTextBox.setTextColor(Color.RED);
+    } else {
+      fundsBalanceTextBox.setTextColor(Color.BLACK);
+    }
+
+    fundsBalanceTextBox.setText("Balance " + getActivity().getString(R.string.euro_sym) + Double.toString(myFunds - mytotalExpenses));
+  }
+    @Override
   public void displayTodaysExpenses(List<Expense> expenses) {
     ListView listView = (ListView) getActivity().findViewById(R.id.todays_expenses_list);
     listView.setAdapter(new TodaysExpenseListViewAdapter(expenses, getActivity(), android.R.layout.simple_list_item_1));
